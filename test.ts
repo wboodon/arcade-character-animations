@@ -16,7 +16,6 @@ let mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . .
     `, SpriteKind.Player)
-tiles.setCurrentTilemap(tilemap`level1`)
 mySprite.setStayInScreen(true)
 mySprite.ay = 100
 controller.moveSprite(mySprite, 100, 0)
