@@ -15,9 +15,7 @@
         "docs/run-character-animation.md",
         "docs/set-character-animations-enabled.md",
         "docs/set-character-state.md",
-        "docs/rule.md",
-        "tilemap.g.jres",
-        "tilemap.g.ts"
+        "docs/rule.md"
     ],
     "testFiles": [
         "test.ts"
