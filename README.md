@@ -2,6 +2,16 @@
 
 A MakeCode Arcade extension for creating rules that control when animations run on a sprite.
 
+
+## Why did you fork this?
+
+This fork customizes the plugin for my own nefarious purposes. The original didn't allow for the creation of your own states, so I had to make some small changes:
+
+* You can set whether a sprite is looking forward, up, or down. This is useful for aiming in sidescrollers.
+
+I'll continue updating this as needed, and I'll link the game that uses this plugin once that's ready.
+
+
 ## Basic Rules
 
 To attach animations to a sprite, you first need to create a "Rule" that dictates when the animation will run. Rules are made up of several parts that each describe a sprite's behavior. For example, if we were making a platformer here are some of the rules we might use to control the walking animations:
