@@ -36,6 +36,12 @@ enum Predicate {
     HittingWallDown = 1 << 12,
     //% block="hitting wall left"
     HittingWallLeft = 1 << 13,
+    //% block="looking forward"
+    LookingForward = 1 << 14,
+    //% block="looking up"
+    LookingUp = 1 << 15,
+    //% block="looking down"
+    LookingDown = 1 << 16
 }
 
 //% color="#7d6282" icon="\uf03d" block="Character"
@@ -44,6 +50,7 @@ namespace characterAnimations {
 
     const FACING = Predicate.FacingUp | Predicate.FacingRight | Predicate.FacingDown | Predicate.FacingLeft;
     const MOVING = Predicate.MovingUp | Predicate.MovingRight | Predicate.MovingDown | Predicate.MovingLeft | Predicate.Moving;
+    const LOOKING = Predicate.LookingForward | Predicate.LookingUp | Predicate.LookingDown;
 
     let sceneStack: CharacterAnimationSceneState[];
 
@@ -96,16 +103,19 @@ namespace characterAnimations {
 
         protected manualFlags: number;
 
+        protected manualLookingDirection: number;
+
         constructor(public sprite: Sprite) {
             this.animations = [];
             this.timer = 0;
             this.frame = 0;
-            this.lastState = Predicate.FacingRight;
+            this.lastState = Predicate.FacingRight | Predicate.LookingForward;
             this.possibleFacingDirections = 0;
             this.enabled = true;
             this.lastX = sprite.x;
             this.lastY = sprite.y;
             this.manualFlags = 0;
+            this.manualLookingDirection = 0;
         }
 
         setFrames(loop: boolean, frames: Image[], interval: number, rule: Rule) {
@@ -212,7 +222,7 @@ namespace characterAnimations {
             this.lastX = this.sprite.x;
             this.lastY = this.sprite.y;
 
-
+            state |= (this.manualLookingDirection || (this.lastState & LOOKING))
 
             const newAnimation = this.pickRule(this.manualFlags || state);
             if (newAnimation !== this.current) {
@@ -287,6 +297,14 @@ namespace characterAnimations {
             if (!flags) return;
 
             this.manualFlags = flags;
+        }
+
+        setManualLookingDirection(direction: LookingDirection) {
+            switch(direction) {
+                case LookingDirection.Forward: this.manualLookingDirection = Predicate.LookingForward; break;
+                case LookingDirection.Up: this.manualLookingDirection = Predicate.LookingUp; break;
+                case LookingDirection.Down: this.manualLookingDirection = Predicate.LookingDown; break;
+            }
         }
 
         clearState() {
@@ -424,6 +442,15 @@ namespace characterAnimations {
         }
         if (rule & Predicate.HittingWallLeft) {
             out += "hitting-wall-left "
+        }
+        if (rule & Predicate.LookingForward) {
+            out += "looking-forward "
+        }
+        if (rule & Predicate.LookingUp) {
+            out += "looking-up "
+        }
+        if (rule & Predicate.LookingDown) {
+            out += "looking-down "
         }
 
         return out.trim();
@@ -686,5 +713,22 @@ namespace characterAnimations {
     //% help=github:arcade-character-animations/docs/predicate
     export function _predicate(predicate: Predicate): number {
         return predicate
+    }
+
+    export enum LookingDirection {
+        Forward = 0,
+        Up = -1,
+        Down = 1
+    }
+
+    /**
+     * Set the direction a sprite is looking
+     */
+    //% blockId=arcade_character_set_direction block="$sprite set direction $direction"
+    //% sprite.defl=mySprite
+    //% sprite.shadow=variables_get
+    export function setDirection(sprite: Sprite, direction: LookingDirection) {
+        const state = getStateForSprite(sprite, true);
+        state.setManualLookingDirection(direction);
     }
 }

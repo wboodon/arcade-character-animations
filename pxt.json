@@ -15,13 +15,15 @@
         "docs/run-character-animation.md",
         "docs/set-character-animations-enabled.md",
         "docs/set-character-state.md",
-        "docs/rule.md"
+        "docs/rule.md",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
     ],
     "testFiles": [
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.4.44",
+        "target": "2.0.62",
         "targetId": "arcade"
     },
     "supportedTargets": [
